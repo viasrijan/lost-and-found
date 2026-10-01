@@ -108,10 +108,10 @@ export default function Profile() {
       )}
 
       <div className="card p-5 mt-6 !border-red-500/25">
-        <h2 className="text-white font-bold text-[16px] inline-flex items-center gap-2"><Trash2 size={17} className="text-red-400" /> Danger zone</h2>
+        <h2 className="text-white font-bold text-[16px] inline-flex items-center gap-2"><Trash2 size={17} className="text-red-400" /> Delete account</h2>
         <p className="text-[13.5px] text-white/50 mt-1.5 leading-relaxed">
-          Delete your account, listings, messages and claims on every device.
-          {cloudWrite ? ' This also wipes your cloud data.' : ' You are in demo mode, so this clears this browser.'} Fully erasing the Google login itself is done in Supabase → Authentication → Users.
+          Deleting your account will delete all your listings, messages, claims and history. This cannot be undone.
+          {cloudWrite ? ' This also wipes your cloud data.' : ''}
         </p>
         <button
           onClick={() => {

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Check, Clock, Gift, MapPin, MessageCircle, ShieldCheck, Sparkles, Trash2 } from 'lucide-react'
 import { useDB } from '../lib/DBContext'
 import { useAuth } from '../features/auth/AuthContext'
-import { openOrGetConvo } from '../lib/store'
+import { openOrGetConvo, sampleFallback } from '../lib/store'
 import { supabase } from '../lib/supabase'
 import { deleteCloudItem, insertCloudClaim, insertCloudConvo, updateCloudItemStatus } from '../lib/cloud'
 import { timeAgo, uid, nowIso } from '../lib/types'
@@ -92,8 +92,13 @@ export default function ItemDetail() {
       <Link to="/" className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-white/50 hover:text-white"><ArrowLeft size={15} /> Back to results</Link>
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="grid lg:grid-cols-[1.1fr_0.9fr] gap-5 mt-3">
         <div className="card overflow-hidden h-fit">
-          <div className="h-[300px] sm:h-[360px] bg-gradient-to-br from-white/[0.06] to-transparent grid place-items-center relative">
-            {item.images[0] ? <img src={item.images[0]} alt={item.title} className="absolute inset-0 w-full h-full object-cover" /> : <span className="text-white/20 text-[72px]">{item.type === 'lost' ? '🔎' : '🎒'}</span>}
+          {item.sample && (
+            <div className="bg-amber-400 text-amber-950 text-[13px] font-extrabold tracking-wide px-4 py-2.5 text-center">
+              SAMPLE LISTING — example post, not a real item
+            </div>
+          )}
+          <div className="h-[300px] sm:h-[360px] bg-white/[0.04] grid place-items-center relative">
+            {item.images[0] ? <img src={item.images[0]} alt={item.title} onError={(e) => { const el = e.currentTarget; if (!el.dataset.fb) { el.dataset.fb = '1'; el.src = sampleFallback(el.src) } }} className="absolute inset-0 w-full h-full object-cover" /> : <span className="text-white/20 text-[72px]">{item.type === 'lost' ? '🔎' : '🎒'}</span>}
             <span className={`absolute top-4 left-4 text-[12px] font-bold px-3 h-8 inline-flex items-center rounded-full ${item.type === 'lost' ? 'bg-amber-400 text-amber-950' : 'bg-emerald-500 text-emerald-950'}`}>{item.type.toUpperCase()}</span>
             {item.sample && (
               <span className="absolute top-4 right-4 text-[11px] font-bold px-3 h-8 inline-flex items-center gap-1 rounded-full bg-white/10 text-white/80 backdrop-blur border border-white/15">
@@ -103,7 +108,7 @@ export default function ItemDetail() {
           </div>
           {item.images.length > 1 && (
             <div className="flex gap-2 p-3 overflow-x-auto">
-              {item.images.map((src, i) => <img key={i} src={src} alt="" className="w-20 h-20 rounded-[10px] object-cover border border-white/10" />)}
+              {item.images.map((src, i) => <img key={i} src={src} alt="" onError={(e) => { const el = e.currentTarget; if (!el.dataset.fb) { el.dataset.fb = '1'; el.src = sampleFallback(el.src) } }} className="w-20 h-20 rounded-[10px] object-cover border border-white/10" />)}
             </div>
           )}
           <div className="p-5">

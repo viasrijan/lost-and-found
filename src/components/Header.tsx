@@ -40,7 +40,7 @@ export default function Header({ onSearchFocus }: { onSearchFocus?: () => void }
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <div className="h-[64px] flex items-center gap-3">
           <Link to="/" className="flex items-center gap-2.5 shrink-0">
-            <span className="w-9 h-9 rounded-[12px] bg-gradient-to-br from-[#14B8A6] to-[#0F766E] grid place-items-center shadow-card">
+            <span className="w-9 h-9 rounded-[12px] bg-[#14B8A6] grid place-items-center shadow-card">
               <Search size={19} strokeWidth={2.6} className="text-[#052E2B]" />
             </span>
             <span className="font-extrabold tracking-tight text-[17px] text-white">Lost &amp; Found</span>

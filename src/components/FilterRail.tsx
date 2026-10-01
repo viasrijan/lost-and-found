@@ -20,7 +20,7 @@ export const DEFAULT_FILTERS: Filters = {
 export default function FilterRail({ f, setF, counts }: { f: Filters; setF: (v: Filters) => void; counts: { lost: number; found: number } }) {
   const cities = f.country ? (COUNTRIES[f.country] ?? []) : []
   return (
-    <aside className="card p-5 space-y-5 lg:sticky lg:top-[84px] h-fit">
+    <aside className="rounded-[14px] border border-white/[0.06] bg-[#101015] p-5 space-y-5 lg:sticky lg:top-[84px] h-fit">
       <div>
         <p className="text-[12px] font-bold uppercase tracking-widest text-white/40 mb-2">Type</p>
         <div className="flex gap-2">

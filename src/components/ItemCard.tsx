@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Clock, MapPin, PackageSearch, PackageCheck, Sparkles } from 'lucide-react'
 import type { Item } from '../lib/types'
+import { sampleFallback } from '../lib/store'
 import { timeAgo } from '../lib/types'
 
 export default function ItemCard({ item, index = 0 }: { item: Item; index?: number }) {
@@ -13,23 +14,25 @@ export default function ItemCard({ item, index = 0 }: { item: Item; index?: numb
       transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.3), ease: [0.22, 1, 0.36, 1] }}
     >
       <Link to={`/item/${item.id}`} className="card group overflow-hidden block hover:-translate-y-[3px] hover:border-teal-300/25 hover:shadow-[0_16px_40px_-16px_rgba(20,184,166,0.25)] transition-all duration-200">
-        <div className="h-[150px] relative grid place-items-center bg-gradient-to-br from-white/[0.07] via-white/[0.02] to-transparent overflow-hidden">
+        <div className="h-[150px] relative grid place-items-center bg-white/[0.04] overflow-hidden">
           {item.images[0] ? (
-            <img src={item.images[0]} alt={item.title} className="absolute inset-0 w-full h-full object-cover transition duration-300 group-hover:scale-[1.05]" loading="lazy" />
+            <img src={item.images[0]} alt={item.title} onError={(e) => { const el = e.currentTarget; if (!el.dataset.fb) { el.dataset.fb = '1'; el.src = sampleFallback(el.src) } }} className="absolute inset-0 w-full h-full object-cover transition duration-300 group-hover:scale-[1.05]" loading="lazy" />
           ) : lost ? (
             <PackageSearch size={44} className="text-amber-300/70" />
           ) : (
             <PackageCheck size={44} className="text-teal-300/70" />
           )}
-          <span className={`absolute top-3 left-3 text-[12px] font-bold px-2.5 h-7 inline-flex items-center rounded-full ${lost ? 'bg-amber-400 text-amber-950' : 'bg-emerald-500 text-emerald-950'}`}>
-            {lost ? 'LOST' : 'FOUND'}
-          </span>
-          <span className="absolute top-3 right-3 flex gap-1.5">
+          <span className="absolute top-3 left-3 flex flex-col items-start gap-1.5">
+            <span className={`text-[12px] font-bold px-2.5 h-7 inline-flex items-center rounded-full ${lost ? 'bg-amber-400 text-amber-950' : 'bg-emerald-500 text-emerald-950'}`}>
+              {lost ? 'LOST' : 'FOUND'}
+            </span>
             {item.sample && (
-              <span className="text-[11px] font-bold px-2.5 h-7 inline-flex items-center gap-1 rounded-full bg-white/10 text-white/80 backdrop-blur border border-white/15">
-                <Sparkles size={11} /> SAMPLE
+              <span className="text-[11px] font-extrabold tracking-wide px-2.5 h-6 inline-flex items-center gap-1 rounded-full bg-amber-400 text-amber-950">
+                <Sparkles size={11} strokeWidth={3} /> SAMPLE
               </span>
             )}
+          </span>
+          <span className="absolute top-3 right-3 flex gap-1.5">
             {item.status !== 'active' && (
               <span className="text-[11px] font-bold px-2.5 h-7 inline-flex items-center rounded-full bg-black/70 text-white uppercase border border-white/15">{item.status}</span>
             )}
