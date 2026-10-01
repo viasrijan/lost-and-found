@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 html, body {
@@ -13,49 +13,56 @@ html, body {
 }
 
 body {
-  background: #FAF9F7;
-  color: #131210;
+  background: #0E0E12;
+  color: #F4F4F5;
 }
 
 ::selection {
-  background: #0E6B61;
-  color: #fff;
+  background: #14B8A6;
+  color: #052E2B;
 }
 
 .card {
-  @apply bg-white rounded-[14px] shadow-card border border-black/5;
+  @apply bg-[#17171D] rounded-[14px] border border-white/[0.08];
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -16px rgba(0, 0, 0, 0.6);
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 bg-[#0E6B61] hover:bg-[#0A544C] text-white font-semibold rounded-[12px] px-4 h-11 transition-all active:scale-[0.98] disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-2 bg-[#0F766E] hover:bg-[#0D9488] text-white font-semibold rounded-[12px] px-4 h-11 transition-all active:scale-[0.98] disabled:opacity-50;
 }
 
 .btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 bg-white border border-black/10 hover:border-black/20 font-semibold rounded-[12px] px-4 h-11 transition-all active:scale-[0.98];
+  @apply inline-flex items-center justify-center gap-2 bg-white/[0.04] border border-white/10 hover:border-white/25 text-white/90 font-semibold rounded-[12px] px-4 h-11 transition-all active:scale-[0.98];
 }
 
 .input {
-  @apply w-full bg-white border border-black/10 rounded-[12px] px-3.5 h-11 text-[15px] outline-none focus:border-[#0E6B61] focus:ring-2 focus:ring-[#0E6B61]/20 transition placeholder:text-black/35;
+  @apply w-full bg-[#101015] border border-white/10 text-white rounded-[12px] px-3.5 h-11 text-[15px] outline-none focus:border-[#14B8A6] focus:ring-2 focus:ring-[#14B8A6]/25 transition placeholder:text-white/30;
+  color-scheme: dark;
 }
 
 .textarea {
-  @apply w-full bg-white border border-black/10 rounded-[12px] px-3.5 py-3 text-[15px] outline-none focus:border-[#0E6B61] focus:ring-2 focus:ring-[#0E6B61]/20 transition placeholder:text-black/35 min-h-[110px];
+  @apply w-full bg-[#101015] border border-white/10 text-white rounded-[12px] px-3.5 py-3 text-[15px] outline-none focus:border-[#14B8A6] focus:ring-2 focus:ring-[#14B8A6]/25 transition placeholder:text-white/30 min-h-[110px];
 }
 
 .select {
-  @apply w-full bg-white border border-black/10 rounded-[12px] px-3 h-11 text-[15px] outline-none focus:border-[#0E6B61] transition;
+  @apply w-full bg-[#101015] border border-white/10 text-white rounded-[12px] px-3 h-11 text-[15px] outline-none focus:border-[#14B8A6] transition;
+  color-scheme: dark;
+}
+
+.select option {
+  background: #17171D;
 }
 
 .chip {
-  @apply inline-flex items-center gap-1.5 text-[13px] font-medium bg-black/[0.05] hover:bg-black/[0.08] rounded-full px-3 h-8 transition cursor-pointer select-none;
+  @apply inline-flex items-center gap-1.5 text-[13px] font-medium text-white/75 bg-white/[0.06] hover:bg-white/[0.1] rounded-full px-3 h-8 transition cursor-pointer select-none;
 }
 
 .chip-active {
-  @apply bg-[#0E6B61] text-white hover:bg-[#0A544C];
+  @apply bg-[#0F766E] text-white hover:bg-[#0D9488];
 }
 
 .skeleton {
-  @apply animate-pulse bg-black/[0.07] rounded-[12px];
+  @apply animate-pulse bg-white/[0.07] rounded-[12px];
 }
 
 .scroll-thin::-webkit-scrollbar {
@@ -63,7 +70,7 @@ body {
   height: 6px;
 }
 .scroll-thin::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.18);
+  background: rgba(255, 255, 255, 0.18);
   border-radius: 99px;
 }
 

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
+import { ensureProfile } from '../../lib/cloud'
 import type { Profile } from '../../lib/types'
 
 interface AuthCtx {
@@ -16,8 +17,23 @@ const LS_USER = 'lf_user_v1'
 
 function avatarFor(name: string): string {
   const initials = name.trim().split(/\s+/).map(p => p[0]).join('').slice(0, 2).toUpperCase() || 'LF'
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96'><rect width='96' height='96' rx='48' fill='#0E6B61'/><text x='48' y='60' font-family='Inter,sans-serif' font-size='34' font-weight='700' fill='white' text-anchor='middle'>${initials}</text></svg>`
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96'><rect width='96' height='96' rx='48' fill='#0F766E'/><text x='48' y='60' font-family='Inter,sans-serif' font-size='34' font-weight='700' fill='white' text-anchor='middle'>${initials}</text></svg>`
   return `data:image/svg+xml,${encodeURIComponent(svg)}`
+}
+
+function toProfile(u: { id: string; email?: string | null; user_metadata?: Record<string, any> }): Profile {
+  const email = u.email || 'member'
+  return {
+    id: u.id,
+    name: (u.user_metadata?.full_name as string) || email.split('@')[0] || 'Member',
+    avatar: (u.user_metadata?.avatar_url as string) || avatarFor(email)
+  }
+}
+
+function persistProfile(p: Profile) {
+  // Fire-and-forget: lets cloud rows reference this user (FK). Fails silently
+  // until supabase/migrations/002_policies.sql has been run once.
+  ensureProfile(p).catch(() => undefined)
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -37,22 +53,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     sb.auth.getSession().then(({ data }) => {
       const u = data.session?.user
       if (u) {
-        setUser({
-          id: u.id,
-          name: (u.user_metadata?.full_name as string) || u.email?.split('@')[0] || 'Member',
-          avatar: (u.user_metadata?.avatar_url as string) || avatarFor(u.email || 'M')
-        })
+        const p = toProfile(u)
+        setUser(p)
+        persistProfile(p)
       }
       setLoading(false)
     })
     const { data: sub } = sb.auth.onAuthStateChange((_e, session) => {
       const u = session?.user
       if (u) {
-        setUser({
-          id: u.id,
-          name: (u.user_metadata?.full_name as string) || u.email?.split('@')[0] || 'Member',
-          avatar: (u.user_metadata?.avatar_url as string) || avatarFor(u.email || 'M')
-        })
+        const p = toProfile(u)
+        setUser(p)
+        persistProfile(p)
       } else setUser(null)
     })
     return () => { sub.subscription.unsubscribe() }

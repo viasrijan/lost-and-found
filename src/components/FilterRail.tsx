@@ -1,3 +1,4 @@
+import { RotateCcw } from 'lucide-react'
 import { CATEGORIES, COLORS } from '../lib/categories'
 import { COUNTRIES } from '../lib/countries'
 
@@ -21,7 +22,7 @@ export default function FilterRail({ f, setF, counts }: { f: Filters; setF: (v: 
   return (
     <aside className="card p-5 space-y-5 lg:sticky lg:top-[84px] h-fit">
       <div>
-        <p className="text-[12px] font-bold uppercase tracking-widest text-black/45 mb-2">Type</p>
+        <p className="text-[12px] font-bold uppercase tracking-widest text-white/40 mb-2">Type</p>
         <div className="flex gap-2">
           {(['all', 'lost', 'found'] as const).map(t => (
             <button key={t} onClick={() => setF({ ...f, type: t })} className={`chip ${f.type === t ? 'chip-active' : ''}`}>
@@ -31,7 +32,7 @@ export default function FilterRail({ f, setF, counts }: { f: Filters; setF: (v: 
         </div>
       </div>
       <div>
-        <p className="text-[12px] font-bold uppercase tracking-widest text-black/45 mb-2">Category</p>
+        <p className="text-[12px] font-bold uppercase tracking-widest text-white/40 mb-2">Category</p>
         <select className="select" value={f.category} onChange={e => setF({ ...f, category: e.target.value })}>
           <option value="">All categories</option>
           {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
@@ -39,14 +40,14 @@ export default function FilterRail({ f, setF, counts }: { f: Filters; setF: (v: 
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <p className="text-[12px] font-bold uppercase tracking-widest text-black/45 mb-2">Color</p>
+          <p className="text-[12px] font-bold uppercase tracking-widest text-white/40 mb-2">Color</p>
           <select className="select" value={f.color} onChange={e => setF({ ...f, color: e.target.value })}>
             <option value="">Any</option>
             {COLORS.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
         <div>
-          <p className="text-[12px] font-bold uppercase tracking-widest text-black/45 mb-2">Sort</p>
+          <p className="text-[12px] font-bold uppercase tracking-widest text-white/40 mb-2">Sort</p>
           <select className="select" value={f.sort} onChange={e => setF({ ...f, sort: e.target.value as Filters['sort'] })}>
             <option value="newest">Newest first</option>
             <option value="oldest">Oldest first</option>
@@ -54,7 +55,7 @@ export default function FilterRail({ f, setF, counts }: { f: Filters; setF: (v: 
         </div>
       </div>
       <div>
-        <p className="text-[12px] font-bold uppercase tracking-widest text-black/45 mb-2">Location</p>
+        <p className="text-[12px] font-bold uppercase tracking-widest text-white/40 mb-2">Location</p>
         <select className="select mb-2" value={f.country} onChange={e => setF({ ...f, country: e.target.value, city: '' })}>
           <option value="">Worldwide</option>
           {Object.keys(COUNTRIES).map(c => <option key={c} value={c}>{c}</option>)}
@@ -64,11 +65,13 @@ export default function FilterRail({ f, setF, counts }: { f: Filters; setF: (v: 
           {cities.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
       </div>
-      <label className="flex items-center gap-2.5 text-[14px] font-semibold cursor-pointer">
-        <input type="checkbox" checked={f.hasPhoto} onChange={e => setF({ ...f, hasPhoto: e.target.checked })} className="w-4 h-4 accent-[#0E6B61]" />
+      <label className="flex items-center gap-2.5 text-[14px] font-semibold text-white/80 cursor-pointer">
+        <input type="checkbox" checked={f.hasPhoto} onChange={e => setF({ ...f, hasPhoto: e.target.checked })} className="w-4 h-4 accent-[#14B8A6]" />
         With photo only
       </label>
-      <button onClick={() => setF(DEFAULT_FILTERS)} className="text-[13px] font-semibold text-black/50 hover:text-black underline underline-offset-4">Reset all filters</button>
+      <button onClick={() => setF(DEFAULT_FILTERS)} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-white/45 hover:text-white underline underline-offset-4">
+        <RotateCcw size={13} /> Reset all filters
+      </button>
     </aside>
   )
 }

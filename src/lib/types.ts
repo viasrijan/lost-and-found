@@ -22,6 +22,7 @@ export interface Item {
   images: string[]
   createdAt: string
   handoffCode?: string
+  sample?: boolean
 }
 
 export interface Profile {

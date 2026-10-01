@@ -37,28 +37,28 @@ function seedItems(): Item[] {
       category: 'Wallets & Purses', tags: ['Leather', 'Bifold', 'Contains ID'], color: 'Black', brand: 'Unbranded',
       dateEvent: new Date(t - 86400000).toISOString().slice(0, 10), country: 'United States', city: 'New York', area: 'City Park',
       status: 'active', ownerId: 'demo_finder', ownerName: 'Ava M.', proofQuestion: 'What initials are embossed inside?',
-      images: [], createdAt: iso(60 * 26)
+      images: ['https://picsum.photos/seed/lf-wallet/800/600'], createdAt: iso(60 * 26), sample: true
     },
     {
       id: 'seed_2', type: 'lost', title: 'Silver MacBook 13-inch in grey sleeve', description: 'Left in library reading room, grey sleeve with a small mountain sticker. Reward offered.',
       category: 'Laptops', tags: ['MacBook', '13-inch', 'In sleeve'], color: 'Silver', brand: 'Apple',
       dateEvent: new Date(t - 2 * 86400000).toISOString().slice(0, 10), country: 'United Kingdom', city: 'London', area: 'Library',
       status: 'active', reward: 'Coffee + eternal gratitude', ownerId: 'demo_seeker', ownerName: 'Daniel K.', proofQuestion: 'What sticker is on the sleeve?',
-      images: [], createdAt: iso(60 * 50)
+      images: ['https://picsum.photos/seed/lf-macbook/800/600'], createdAt: iso(60 * 50), sample: true
     },
     {
       id: 'seed_3', type: 'found', title: 'Set of keys with blue lanyard', description: 'Three keys + gym fob on a blue lanyard. Found at bus stop.',
       category: 'Keys', tags: ['Key bunch', 'Lanyard'], color: 'Blue', brand: '',
       dateEvent: new Date().toISOString().slice(0, 10), country: 'India', city: 'Bengaluru', area: 'Bus Stop',
       status: 'active', ownerId: 'demo_finder', ownerName: 'Ava M.', proofQuestion: 'How many keys + what fob?',
-      images: [], createdAt: iso(60 * 5)
+      images: ['https://picsum.photos/seed/lf-keys/800/600'], createdAt: iso(60 * 5), sample: true
     },
     {
       id: 'seed_4', type: 'lost', title: 'AirPods Pro with white case', description: 'Lost on morning metro, white case with tiny scratch on lid.',
       category: 'Audio & Headphones', tags: ['AirPods', 'Charging case'], color: 'White', brand: 'Apple',
       dateEvent: new Date().toISOString().slice(0, 10), country: 'Singapore', city: 'Singapore', area: 'Metro / Subway',
       status: 'active', ownerId: 'demo_seeker', ownerName: 'Daniel K.', proofQuestion: 'What mark is on the case lid?',
-      images: [], createdAt: iso(90)
+      images: ['https://picsum.photos/seed/lf-airpods/800/600'], createdAt: iso(90), sample: true
     }
   ]
 }

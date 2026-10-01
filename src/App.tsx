@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
+import { Compass, MessageCircle, Plus, Bell, ShieldCheck, Info } from 'lucide-react'
 import { AuthProvider } from './features/auth/AuthContext'
 import { DBProvider } from './lib/DBContext'
 import Header from './components/Header'
@@ -25,7 +26,6 @@ export default function App() {
         setTimeout(() => document.querySelector<HTMLInputElement>('input[placeholder*="Try"]')?.focus(), 50)
       }
       if (e.key.toLowerCase() === 'n' && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement)) {
-        window.location.hash = ''
         if (window.location.pathname !== '/post') window.location.href = '/post'
       }
     }
@@ -36,7 +36,7 @@ export default function App() {
   return (
     <AuthProvider>
       <DBProvider>
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col bg-[#0E0E12]">
           <Header onSearchFocus={() => { setFocusKey(k => k + 1); setTimeout(() => document.querySelector<HTMLInputElement>('input[placeholder*="Try"]')?.focus(), 50) }} />
           <main className="flex-1">
             <Routes>
@@ -49,18 +49,21 @@ export default function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/moderation" element={<Moderation />} />
               <Route path="/safety" element={<TrustSafety />} />
-              <Route path="*" element={<div className="max-w-[560px] mx-auto px-4 py-16 text-center"><h1 className="font-extrabold text-[22px]">Page not found</h1><Link to="/" className="btn-primary mt-4 text-[14px]">Go home</Link></div>} />
+              <Route path="*" element={<div className="max-w-[560px] mx-auto px-4 py-16 text-center"><h1 className="text-white font-extrabold text-[22px]">Page not found</h1><Link to="/" className="btn-primary mt-4 text-[14px]">Go home</Link></div>} />
             </Routes>
           </main>
-          <footer className="border-t border-black/[0.07] bg-white/70">
-            <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center gap-3">
-              <p className="font-extrabold tracking-tight">Lost &amp; Found</p>
-              <nav className="flex gap-4 text-[13.5px] font-semibold text-black/60">
-                <Link to="/alerts" className="hover:text-black">Alerts</Link>
-                <Link to="/moderation" className="hover:text-black">Moderation</Link>
-                <Link to="/safety" className="hover:text-black">Trust &amp; Safety</Link>
+          <footer className="border-t border-white/[0.08] bg-[#0E0E12]">
+            <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-8 flex flex-col items-center gap-4">
+              <p className="text-white font-extrabold tracking-tight text-[16px]">Lost &amp; Found</p>
+              <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-[13.5px] font-semibold text-white/55">
+                <Link to="/" className="inline-flex items-center gap-1.5 hover:text-white transition"><Compass size={14} /> Browse</Link>
+                <Link to="/post" className="inline-flex items-center gap-1.5 hover:text-white transition"><Plus size={14} /> Post</Link>
+                <Link to="/inbox" className="inline-flex items-center gap-1.5 hover:text-white transition"><MessageCircle size={14} /> Inbox</Link>
+                <Link to="/alerts" className="inline-flex items-center gap-1.5 hover:text-white transition"><Bell size={14} /> Alerts</Link>
+                <Link to="/moderation" className="inline-flex items-center gap-1.5 hover:text-white transition"><ShieldCheck size={14} /> Moderation</Link>
+                <Link to="/safety" className="inline-flex items-center gap-1.5 hover:text-white transition"><Info size={14} /> Trust &amp; Safety</Link>
               </nav>
-              <p className="sm:ml-auto text-[12.5px] text-black/45">Meet in public · Proof before hand-off · © {new Date().getFullYear()}</p>
+              <p className="text-[12.5px] text-white/30">© {new Date().getFullYear()} Lost &amp; Found</p>
             </div>
           </footer>
         </div>
