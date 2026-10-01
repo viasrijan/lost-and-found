@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
-import { BadgeCheck, Check, LogOut, Plus, User, X } from 'lucide-react'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { BadgeCheck, Check, LogOut, Plus, Trash2, User, X } from 'lucide-react'
 import { useDB } from '../lib/DBContext'
 import { useAuth } from '../features/auth/AuthContext'
 import { supabase } from '../lib/supabase'
@@ -9,8 +10,10 @@ import ItemCard from '../components/ItemCard'
 const SYNC_MSG = 'Saved on this device only — run supabase/migrations/002_policies.sql in the Supabase SQL editor to enable cloud sync.'
 
 export default function Profile() {
-  const { user, signOut } = useAuth()
-  const { items, setItems, claims, setClaims, flagSyncIssue } = useDB()
+  const { user, signOut, deleteAccount } = useAuth()
+  const { items, setItems, claims, setClaims, convos, setConvos, msgs, setMsgs, flagSyncIssue } = useDB()
+  const [busy, setBusy] = useState(false)
+  const nav = useNavigate()
 
   if (!user) {
     return (
@@ -103,6 +106,34 @@ export default function Profile() {
           </div>
         </div>
       )}
+
+      <div className="card p-5 mt-6 !border-red-500/25">
+        <h2 className="text-white font-bold text-[16px] inline-flex items-center gap-2"><Trash2 size={17} className="text-red-400" /> Danger zone</h2>
+        <p className="text-[13.5px] text-white/50 mt-1.5 leading-relaxed">
+          Delete your account, listings, messages and claims on every device.
+          {cloudWrite ? ' This also wipes your cloud data.' : ' You are in demo mode, so this clears this browser.'} Fully erasing the Google login itself is done in Supabase → Authentication → Users.
+        </p>
+        <button
+          onClick={() => {
+            if (!window.confirm('Delete your account and everything you posted? This cannot be undone.')) return
+            setBusy(true)
+            if (user) {
+              const uid = user.id
+              const myItemIds = new Set(items.filter(i => i.ownerId === uid).map(i => i.id))
+              const doomed = new Set(convos.filter(c => c.aId === uid || c.bId === uid).map(c => c.id))
+              setItems(items.filter(i => i.ownerId !== uid))
+              setClaims(claims.filter(c => c.claimantId !== uid && !myItemIds.has(c.itemId)))
+              setConvos(convos.filter(c => !(c.aId === uid || c.bId === uid)))
+              setMsgs(msgs.filter(m => !doomed.has(m.convoId)))
+            }
+            deleteAccount().then(() => nav('/')).catch(() => nav('/'))
+          }}
+          disabled={busy}
+          className="mt-3 inline-flex items-center gap-2 bg-red-500/15 hover:bg-red-500/25 border border-red-500/40 text-red-200 font-semibold rounded-[12px] px-4 h-11 text-[14px] transition disabled:opacity-50"
+        >
+          <Trash2 size={15} /> {busy ? 'Deleting…' : 'Delete my account'}
+        </button>
+      </div>
     </div>
   )
 }

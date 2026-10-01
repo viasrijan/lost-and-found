@@ -12,10 +12,10 @@ export default function ItemCard({ item, index = 0 }: { item: Item; index?: numb
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.3), ease: [0.22, 1, 0.36, 1] }}
     >
-      <Link to={`/item/${item.id}`} className="card overflow-hidden block hover:-translate-y-[2px] hover:border-white/20 transition-all duration-200">
+      <Link to={`/item/${item.id}`} className="card group overflow-hidden block hover:-translate-y-[3px] hover:border-teal-300/25 hover:shadow-[0_16px_40px_-16px_rgba(20,184,166,0.25)] transition-all duration-200">
         <div className="h-[150px] relative grid place-items-center bg-gradient-to-br from-white/[0.07] via-white/[0.02] to-transparent overflow-hidden">
           {item.images[0] ? (
-            <img src={item.images[0]} alt={item.title} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+            <img src={item.images[0]} alt={item.title} className="absolute inset-0 w-full h-full object-cover transition duration-300 group-hover:scale-[1.05]" loading="lazy" />
           ) : lost ? (
             <PackageSearch size={44} className="text-amber-300/70" />
           ) : (

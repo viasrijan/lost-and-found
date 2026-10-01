@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { ensureProfile } from '../../lib/cloud'
+import { purgeUser } from '../../lib/store'
 import type { Profile } from '../../lib/types'
 
 interface AuthCtx {
@@ -10,6 +11,7 @@ interface AuthCtx {
   signInWithGoogle: () => Promise<void>
   signInDemo: (name: string) => void
   signOut: () => Promise<void>
+  deleteAccount: () => Promise<void>
 }
 
 const Ctx = createContext<AuthCtx | null>(null)
@@ -39,6 +41,8 @@ function persistProfile(p: Profile) {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
+  const userRef = useRef<Profile | null>(null)
+  userRef.current = user
 
   useEffect(() => {
     const sb = supabase
@@ -91,8 +95,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try { localStorage.removeItem(LS_USER) } catch { /* noop */ }
   }
 
+  const deleteAccount = async () => {
+    const cur = userRef.current
+    if (supabase && cur && !cur.id.startsWith('demo_')) {
+      try {
+        // Cascades to their listings, claims, threads and messages.
+        // Requires supabase/migrations/003_account_delete.sql (run once).
+        await supabase.from('profiles').delete().eq('id', cur.id)
+      } catch { /* local purge below still runs */ }
+    }
+    purgeUser(cur?.id ?? '')
+    setUser(null)
+    try { localStorage.removeItem(LS_USER) } catch { /* noop */ }
+  }
+
   return (
-    <Ctx.Provider value={{ user, loading, cloud: isSupabaseConfigured, signInWithGoogle, signInDemo, signOut }}>
+    <Ctx.Provider value={{ user, loading, cloud: isSupabaseConfigured, signInWithGoogle, signInDemo, signOut, deleteAccount }}>
       {children}
     </Ctx.Provider>
   )

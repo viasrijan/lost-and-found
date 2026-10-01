@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
 import { Compass, MessageCircle, Plus, Bell, ShieldCheck, Info } from 'lucide-react'
 import { AuthProvider } from './features/auth/AuthContext'
 import { DBProvider } from './lib/DBContext'
+import { SearchProvider } from './lib/SearchContext'
 import Header from './components/Header'
 import Home from './pages/Home'
 import ItemDetail from './pages/ItemDetail'
@@ -16,14 +17,18 @@ import Moderation from './pages/Moderation'
 import TrustSafety from './pages/TrustSafety'
 
 export default function App() {
-  const [focusKey, setFocusKey] = useState(0)
+  const focusSearch = () => {
+    const el = window.innerWidth >= 768
+      ? document.querySelector<HTMLInputElement>('#site-search')
+      : document.querySelector<HTMLInputElement>('#site-search-m')
+    el?.focus()
+  }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === '/' && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement)) {
         e.preventDefault()
-        setFocusKey(k => k + 1)
-        setTimeout(() => document.querySelector<HTMLInputElement>('input[placeholder*="Try"]')?.focus(), 50)
+        focusSearch()
       }
       if (e.key.toLowerCase() === 'n' && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement)) {
         if (window.location.pathname !== '/post') window.location.href = '/post'
@@ -36,11 +41,12 @@ export default function App() {
   return (
     <AuthProvider>
       <DBProvider>
+        <SearchProvider>
         <div className="min-h-screen flex flex-col bg-[#0E0E12]">
-          <Header onSearchFocus={() => { setFocusKey(k => k + 1); setTimeout(() => document.querySelector<HTMLInputElement>('input[placeholder*="Try"]')?.focus(), 50) }} />
+          <Header onSearchFocus={focusSearch} />
           <main className="flex-1">
             <Routes>
-              <Route path="/" element={<Home searchFocusKey={focusKey} />} />
+              <Route path="/" element={<Home />} />
               <Route path="/item/:id" element={<ItemDetail />} />
               <Route path="/post" element={<Post />} />
               <Route path="/inbox" element={<Inbox />} />
@@ -68,6 +74,7 @@ export default function App() {
           </footer>
         </div>
         <Analytics />
+        </SearchProvider>
       </DBProvider>
     </AuthProvider>
   )

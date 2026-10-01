@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Check, Clock, Gift, MapPin, MessageCircle, ShieldCheck, Sparkles } from 'lucide-react'
+import { ArrowLeft, Check, Clock, Gift, MapPin, MessageCircle, ShieldCheck, Sparkles, Trash2 } from 'lucide-react'
 import { useDB } from '../lib/DBContext'
 import { useAuth } from '../features/auth/AuthContext'
 import { openOrGetConvo } from '../lib/store'
 import { supabase } from '../lib/supabase'
-import { insertCloudClaim, insertCloudConvo, updateCloudItemStatus } from '../lib/cloud'
+import { deleteCloudItem, insertCloudClaim, insertCloudConvo, updateCloudItemStatus } from '../lib/cloud'
 import { timeAgo, uid, nowIso } from '../lib/types'
 import ItemCard from '../components/ItemCard'
 
@@ -78,6 +78,15 @@ export default function ItemDetail() {
     }
   }
 
+  const removeListing = () => {
+    if (!window.confirm('Delete this listing everywhere? This cannot be undone.')) return
+    setItems(items.filter(i => i.id !== item.id))
+    if (cloudEligible && !item.sample && !item.id.startsWith('item_')) {
+      deleteCloudItem(item.id).catch(() => undefined)
+    }
+    nav('/')
+  }
+
   return (
     <div className="max-w-[1100px] mx-auto px-4 sm:px-6 py-6">
       <Link to="/" className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-white/50 hover:text-white"><ArrowLeft size={15} /> Back to results</Link>
@@ -128,6 +137,11 @@ export default function ItemDetail() {
               {!mine && <button onClick={() => { void startChat() }} className="btn-primary flex-1 text-[14px]"><MessageCircle size={16} /> Message {item.type === 'lost' ? 'owner' : 'finder'}</button>}
               {mine && item.status === 'active' && <button onClick={markReturned} className="btn-ghost flex-1 text-[14px]"><Check size={16} /> Mark returned</button>}
             </div>
+            {mine && (
+              <button onClick={removeListing} className="mt-2.5 w-full inline-flex items-center justify-center gap-1.5 text-[13px] font-semibold text-red-300/70 hover:text-red-300 border border-transparent hover:border-red-500/30 rounded-[12px] h-10 transition">
+                <Trash2 size={14} /> Delete listing
+              </button>
+            )}
             <p className="text-[12.5px] text-white/40 mt-3 inline-flex items-start gap-1.5"><ShieldCheck size={14} className="shrink-0 mt-0.5" /> Safety: exact contact details stay hidden. Chat here, agree on a public meetup, use the hand-off code.</p>
           </div>
 

@@ -108,3 +108,21 @@ export function sendMsgHelper(msgs: Message[], convoId: string, senderId: string
   const m: Message = { id: uid('msg'), convoId, senderId, body, image, createdAt: nowIso() }
   return [...msgs, m]
 }
+
+// Remove every local trace of a user (account deletion). Shared cache for
+// other users' listings is preserved.
+export function purgeUser(uid: string) {
+  if (!uid) return
+  try {
+    const items = load<Item[]>(K.items, [])
+    const removedItemIds = new Set(items.filter(i => i.ownerId === uid).map(i => i.id))
+    save(K.items, items.filter(i => i.ownerId !== uid))
+    const convos = load<Conversation[]>(K.convos, [])
+    const removedConvoIds = new Set(convos.filter(c => c.aId === uid || c.bId === uid).map(c => c.id))
+    save(K.convos, convos.filter(c => !(c.aId === uid || c.bId === uid)))
+    save(K.msgs, load<Message[]>(K.msgs, []).filter(m => !removedConvoIds.has(m.convoId)))
+    save(K.claims, load<Claim[]>(K.claims, []).filter(c => c.claimantId !== uid && !removedItemIds.has(c.itemId)))
+  } catch {
+    // never block account deletion on storage errors
+  }
+}
