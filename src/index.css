@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html, body {
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: #FAF9F7;
+  color: #131210;
+}
+
+::selection {
+  background: #0E6B61;
+  color: #fff;
+}
+
+.card {
+  @apply bg-white rounded-[14px] shadow-card border border-black/5;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 bg-[#0E6B61] hover:bg-[#0A544C] text-white font-semibold rounded-[12px] px-4 h-11 transition-all active:scale-[0.98] disabled:opacity-50;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 bg-white border border-black/10 hover:border-black/20 font-semibold rounded-[12px] px-4 h-11 transition-all active:scale-[0.98];
+}
+
+.input {
+  @apply w-full bg-white border border-black/10 rounded-[12px] px-3.5 h-11 text-[15px] outline-none focus:border-[#0E6B61] focus:ring-2 focus:ring-[#0E6B61]/20 transition placeholder:text-black/35;
+}
+
+.textarea {
+  @apply w-full bg-white border border-black/10 rounded-[12px] px-3.5 py-3 text-[15px] outline-none focus:border-[#0E6B61] focus:ring-2 focus:ring-[#0E6B61]/20 transition placeholder:text-black/35 min-h-[110px];
+}
+
+.select {
+  @apply w-full bg-white border border-black/10 rounded-[12px] px-3 h-11 text-[15px] outline-none focus:border-[#0E6B61] transition;
+}
+
+.chip {
+  @apply inline-flex items-center gap-1.5 text-[13px] font-medium bg-black/[0.05] hover:bg-black/[0.08] rounded-full px-3 h-8 transition cursor-pointer select-none;
+}
+
+.chip-active {
+  @apply bg-[#0E6B61] text-white hover:bg-[#0A544C];
+}
+
+.skeleton {
+  @apply animate-pulse bg-black/[0.07] rounded-[12px];
+}
+
+.scroll-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.18);
+  border-radius: 99px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
